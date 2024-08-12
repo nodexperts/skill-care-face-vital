@@ -136,7 +136,7 @@ if __name__ == "__main__":
 
     # configurations.
     config = get_config(args)
-    print('Configuration:')
+    # print('Configuration:')
     print(config, end='\n\n')
 
     data_loader_dict = dict() # dictionary of data loaders 
@@ -245,7 +245,7 @@ if __name__ == "__main__":
                              SCAMPS, BP4D+ (Normal and BigSmall preprocessing), UBFC-PHYS and iBVP.")
         
         if config.TOOLBOX_MODE == "train_and_test" and config.TEST.USE_LAST_EPOCH:
-            print("Testing uses last epoch, validation dataset is not required.", end='\n\n')   
+            print("Testing uses last epoch, validation dataset is not required.", end='\n\n')
 
         # Create and initialize the test dataloader given the correct toolbox mode,
         # a supported dataset name, and a valid dataset path
@@ -304,6 +304,7 @@ if __name__ == "__main__":
     if config.TOOLBOX_MODE == "train_and_test":
         train_and_test(config, data_loader_dict)
     elif config.TOOLBOX_MODE == "only_test":
+        print(":>>>>>>>>>>>>>>>>>>>only_test", data_loader_dict)
         test(config, data_loader_dict)
     elif config.TOOLBOX_MODE == "unsupervised_method":
         unsupervised_method_inference(config, data_loader_dict)

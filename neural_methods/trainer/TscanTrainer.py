@@ -12,7 +12,7 @@ from neural_methods.loss.NegPearsonLoss import Neg_Pearson
 from neural_methods.model.TS_CAN import TSCAN
 from neural_methods.trainer.BaseTrainer import BaseTrainer
 from tqdm import tqdm
-
+from evaluation.hrv_processing import process_signal_for_hrv
 
 class TscanTrainer(BaseTrainer):
 
@@ -145,7 +145,7 @@ class TscanTrainer(BaseTrainer):
         """ Model evaluation on the testing dataset."""
         if data_loader["test"] is None:
             raise ValueError("No data for test")
-
+        print("TOOLBOX_MODE:>>>>>>>>>>>>>>>>", self.config.TOOLBOX_MODE)
         print('')
         print("===Testing===")
         predictions = dict()
@@ -175,6 +175,7 @@ class TscanTrainer(BaseTrainer):
         print("Running model evaluation on the testing dataset!")
         with torch.no_grad():
             for _, test_batch in enumerate(tqdm(data_loader["test"], ncols=80)):
+                print(":test_batch>>>>>>>>>>>>", test_batch)
                 batch_size = test_batch[0].shape[0]
                 data_test, labels_test = test_batch[0].to(
                     self.config.DEVICE), test_batch[1].to(self.config.DEVICE)
@@ -199,7 +200,10 @@ class TscanTrainer(BaseTrainer):
                     labels[subj_index][sort_index] = labels_test[idx * self.chunk_len:(idx + 1) * self.chunk_len]
 
         print('')
+        res = process_signal_for_hrv(predictions["subject5"])
+        print("process_signal_for_hrv:>>>>>>>>>>>>.", res)
         calculate_metrics(predictions, labels, self.config)
+        
         if self.config.TEST.OUTPUT_SAVE_DIR: # saving test outputs
             self.save_test_outputs(predictions, labels, self.config)
 

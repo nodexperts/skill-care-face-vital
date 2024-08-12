@@ -50,11 +50,12 @@ def calculate_metrics(predictions, labels, config):
     gt_hr_peak_all = list()
     SNR_all = list()
     MACC_all = list()
-    print("Calculating metrics!")
+    print("Calculating metrics!",len(tqdm(predictions.keys(), ncols=80)))
     for index in tqdm(predictions.keys(), ncols=80):
+        print("index", index)
         prediction = _reform_data_from_dict(predictions[index])
         label = _reform_data_from_dict(labels[index])
-
+        print("prediction:>>>>>>>>>>>>>>>>>", prediction)
         video_frame_size = prediction.shape[0]
         if config.INFERENCE.EVALUATION_WINDOW.USE_SMALLER_WINDOW:
             window_frame_size = config.INFERENCE.EVALUATION_WINDOW.WINDOW_SIZE * config.TEST.DATA.FS
